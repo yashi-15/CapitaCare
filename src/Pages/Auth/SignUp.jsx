@@ -4,7 +4,7 @@ import RightSection from "./RightSection";
 
 const SignUp = () => {
     return (
-        <div className="flex h-screen bg-bglight">
+        <div className="flex h-screen bg-light">
             <div className="basis-2/3 flex justify-center items-center">
                 <div className="w-sm">
                     <div className="my-8 mx-4">

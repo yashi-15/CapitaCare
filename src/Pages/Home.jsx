@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
     return (
-        <div className="relative h-screen bg-bglight">
+        <div className="relative h-screen bg-light">
             <div className="absolute top-0 w-full p-5">
                 <div className="flex justify-between gap-2">
                     <img src="logo.png" width={"50px"} height={"50px"} />

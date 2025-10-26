@@ -4,7 +4,7 @@ import { FiBox } from 'react-icons/fi'
 const RightSection = () => {
   return (
     <div className="basis-1/3 bg-gradient-to-br from-primarygradient-start via-primarygradient-middle to-primarygradient-end flex flex-col items-center justify-center gap-5">
-                <div className="flex items-center gap-4 p-2 w-54 bg-white rounded-md outline outline-8 outline-white/50 outline-offset-0">
+                <div className="flex items-center gap-4 p-2 w-54 bg-white rounded-md outline-8 outline-white/50 outline-offset-0">
                     <div className="bg-gray-100 p-2 rounded-full">
                         <FiBox size={26} className="text-primary" />{" "}
                     </div>
