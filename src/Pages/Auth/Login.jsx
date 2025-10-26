@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import RightSection from "./RightSection";
 
 const Login = () => {
     return (
@@ -20,7 +21,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-            <div className="basis-1/3 bg-gradient-to-br from-primarygradient-start via-primarygradient-middle to-primarygradient-end">h</div>
+            <RightSection />
         </div>
     );
 };
