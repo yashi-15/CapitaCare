@@ -11,7 +11,7 @@ const RightSection = () => {
                     <div className="flex flex-col gap-2 grow">
                         <div className="flex justify-between gap-2 items-center">
                             <h3>Newly SR</h3>
-                            <span className="text-xs text-green-700 bg-green-300 px-2 rounded-full">Paid</span>
+                            <span className="text-xs text-green-700 bg-green-200 px-2 rounded-full">Paid</span>
                         </div>
                         <div>
                             <div className="p-1 rounded-full bg-gray-100 w-10"></div>

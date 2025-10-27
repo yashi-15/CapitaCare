@@ -3,7 +3,7 @@
 @theme {
   --color-primary: #A664FF;
   --color-secondary: #F37335;
-  --color-accent:  #f3f3f5;
+  --color-accent:  #f8f8f8;
   --color-light:      #FAF4FF;
   --color-dark:      #080808;
   --color-primarygradient-start: #BA85FE;
@@ -20,5 +20,5 @@
 }
 
 .sdsd{
-  color: #f4f4f5;
+  color: #f8f8f8;
 }

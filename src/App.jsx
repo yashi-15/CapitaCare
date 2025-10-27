@@ -7,6 +7,7 @@ import Dashboard from "./Pages/Dashboard/Dashboard";
 import DashHome from "./Pages/Dashboard/DashHome";
 import Income from "./Pages/Dashboard/Income";
 import Expense from "./Pages/Dashboard/Expense";
+import Transactions from "./Pages/Dashboard/Transactions";
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                         <Route index element={<DashHome />} />
                         <Route path="income" element={<Income />} />
                         <Route path="expense" element={<Expense />} />
+                        <Route path="transactions" element={<Transactions />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
