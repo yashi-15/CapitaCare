@@ -1,8 +1,9 @@
 import React from "react";
 import { BsThreeDots } from "react-icons/bs";
-import { FaHistory } from "react-icons/fa";
+import { FaCreditCard, FaHistory } from "react-icons/fa";
 import { GiPayMoney, GiReceiveMoney } from "react-icons/gi";
 import { GoHomeFill } from "react-icons/go";
+import { HiCreditCard } from "react-icons/hi";
 import { Link, NavLink, Outlet } from "react-router-dom";
 
 const Dashboard = () => {
@@ -33,7 +34,7 @@ const Dashboard = () => {
                     </NavLink>
                     <NavLink to={"/dashboard/transactions"} className={({ isActive }) => `flex items-center gap-2 p-2 m-1 font-semibold rounded-md ${isActive ? "bg-primary/15 text-primary" : "text-zinc-600"} `}>
                         {" "}
-                        <FaHistory size={24} /> Recent
+                        <HiCreditCard size={24} /> Recent
                     </NavLink>
                 </div>
                 <div className="border-t-2 border-accent">

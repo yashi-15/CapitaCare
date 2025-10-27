@@ -8,8 +8,8 @@ import { Bar, BarChart, Label, LabelList, Legend, Pie, PieChart, Tooltip, XAxis,
 
 const DashHome = () => {
     const data = [
-        { name: "Group A", value: 400, fill: "#0088FE" },
-        { name: "Group B", value: 300, fill: "#00C49F" },
+        { name: "Group A", value: 400, fill: "#2848ff" },
+        { name: "Group B", value: 300, fill: "#36932e" },
         { name: "Group C", value: 300, fill: "#FFBB28" },
     ];
     // #region Sample data

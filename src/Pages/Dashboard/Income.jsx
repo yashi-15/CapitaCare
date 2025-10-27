@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { FiDownload } from "react-icons/fi";
 import { LuPlug, LuPlus } from "react-icons/lu";
 import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
+import AddIncomePopUp from "../../components/AddTransactionPopUp";
+import AddTransactionPopUp from "../../components/AddTransactionPopUp";
 
 const Income = () => {
     const data = [
@@ -50,12 +52,14 @@ const Income = () => {
         },
     ];
 
+    const [addModalOpen, setAddModalOpen] = useState(false)
+
     return (
         <div className="py-3">
             <div className="bg-white p-3 rounded-md shadow-md my-3">
                 <div className="p-4 flex justify-between">
                     <h2 className="font-semibold">Income Overview</h2>
-                    <button className="flex items-center gap-2 rounded-sm px-2 py-1 text-sm bg-primary/15 text-primary hover:scale-96 font-medium">
+                    <button onClick={()=> setAddModalOpen(true)} className="flex items-center gap-2 rounded-sm px-2 py-1 text-sm bg-primary/15 text-primary hover:scale-96 font-medium">
                         <LuPlus /> Add Income
                     </button>
                 </div>
@@ -148,6 +152,7 @@ const Income = () => {
                     </div>
                 </div>
             </div>
+            {addModalOpen && <AddTransactionPopUp type="Income" closePopup={()=> setAddModalOpen(false)} /> }
         </div>
     );
 };

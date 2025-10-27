@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { FiDownload } from "react-icons/fi";
 import { LuPlug, LuPlus } from "react-icons/lu";
 import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
+import AddTransactionPopUp from "../../components/AddTransactionPopUp";
 
 const Expense = () => {
     const data = [
@@ -50,12 +51,15 @@ const Expense = () => {
         },
     ];
 
+        const [addModalOpen, setAddModalOpen] = useState(false)
+    
+
     return (
         <div className="py-3">
             <div className="bg-white p-3 rounded-md shadow-md my-3">
                 <div className="p-4 flex justify-between">
                     <h2 className="font-semibold">Expense Overview</h2>
-                    <button className="flex items-center gap-2 rounded-sm px-2 py-1 text-sm bg-primary/15 text-primary hover:scale-96 font-medium">
+                    <button onClick={()=> setAddModalOpen(true)} className="flex items-center gap-2 rounded-sm px-2 py-1 text-sm bg-primary/15 text-primary hover:scale-96 font-medium">
                         <LuPlus /> Add Expense
                     </button>
                 </div>
@@ -148,6 +152,8 @@ const Expense = () => {
                     </div>
                 </div>
             </div>
+                        {addModalOpen && <AddTransactionPopUp type="Expense" closePopup={()=> setAddModalOpen(false)} /> }
+
         </div>
     );
 };
