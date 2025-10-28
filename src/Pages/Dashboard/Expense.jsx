@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { FiDownload } from "react-icons/fi";
 import { LuPlug, LuPlus } from "react-icons/lu";
 import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
 import AddTransactionPopUp from "../../components/AddTransactionPopUp";
+import { UserContext } from "../../context/userContext";
+import axiosInstance from "../../utils/axiosInstance";
+import { API_PATHS } from "../../utils/apiPaths";
 
 const Expense = () => {
     const data = [
@@ -51,15 +54,37 @@ const Expense = () => {
         },
     ];
 
-        const [addModalOpen, setAddModalOpen] = useState(false)
-    
+    const { user } = useContext(UserContext);
+
+    const [addModalOpen, setAddModalOpen] = useState(false);
+
+    const handleAddExpense = async (category, amount, date, note) => {
+        const data = {
+            user: user.id,
+            type: "expense",
+            category,
+            amount,
+            date,
+            note,
+        };
+        try {
+            const response = await axiosInstance.post(API_PATHS.TRANSACTION.ADD, data);
+            if (response.status == 200) {
+                alert("yayyy");
+            }
+        } catch (error) {
+            alert(error);
+        } finally {
+            setAddModalOpen(false);
+        }
+    };
 
     return (
         <div className="py-3">
             <div className="bg-white p-3 rounded-md shadow-md my-3">
                 <div className="p-4 flex justify-between">
                     <h2 className="font-semibold">Expense Overview</h2>
-                    <button onClick={()=> setAddModalOpen(true)} className="flex items-center gap-2 rounded-sm px-2 py-1 text-sm bg-primary/15 text-primary hover:scale-96 font-medium">
+                    <button onClick={() => setAddModalOpen(true)} className="flex items-center gap-2 rounded-sm px-2 py-1 text-sm bg-primary/15 text-primary hover:scale-96 font-medium">
                         <LuPlus /> Add Expense
                     </button>
                 </div>
@@ -152,8 +177,7 @@ const Expense = () => {
                     </div>
                 </div>
             </div>
-                        {addModalOpen && <AddTransactionPopUp type="Expense" closePopup={()=> setAddModalOpen(false)} /> }
-
+            {addModalOpen && <AddTransactionPopUp type="Expense" closePopup={() => setAddModalOpen(false)} submit={handleAddExpense} />}
         </div>
     );
 };
