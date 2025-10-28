@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { FaCreditCard, FaHistory } from "react-icons/fa";
 import { GiPayMoney, GiReceiveMoney } from "react-icons/gi";
 import { GoHomeFill } from "react-icons/go";
 import { HiCreditCard } from "react-icons/hi";
 import { Link, NavLink, Outlet } from "react-router-dom";
+import { UserContext } from "../../context/userContext";
 
 const Dashboard = () => {
+
+    const {user} = useContext(UserContext)
+
     return (
         <div className="flex h-screen">
             <aside className="w-64 bg-white p-4 flex flex-col gap-6">
@@ -41,8 +45,8 @@ const Dashboard = () => {
                     <div className="flex items-center gap-4 p-2 w-full bg-primary/15 rounded-md mt-4">
                         <div className="bg-white p-2 rounded-full">DK </div>
                         <div className="grow">
-                            <h3>Marvilo</h3>
-                            <p className="text-xs font-light text-gray-700">UI/UX Designer</p>
+                            <h3>{user.fullName}</h3>
+                            <p className="text-xs font-light text-gray-700">{user.email}</p>
                         </div>
                         <div>
                             <BsThreeDots />
