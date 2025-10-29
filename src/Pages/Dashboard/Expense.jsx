@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { FiDownload } from "react-icons/fi";
 import { LuPlug, LuPlus } from "react-icons/lu";
@@ -79,6 +79,24 @@ const Expense = () => {
         }
     };
 
+    const [expense, setExpense] = useState([]);
+    
+        const fetchExpense = async () => {
+            try {
+                const response = await axiosInstance.get(API_PATHS.TRANSACTION.FETCH);
+                if (response.status == 200) {
+                    const data = response.data.filter((item) => item.type === 'expense')
+                    setExpense(data);
+                }
+            } catch (err) {
+                alert(err);
+            }
+        };
+    
+        useEffect(() => {
+            fetchExpense();
+        }, []);
+
     return (
         <div className="py-3">
             <div className="bg-white p-3 rounded-md shadow-md my-3">
@@ -111,70 +129,22 @@ const Expense = () => {
                     </button>
                 </div>
                 <div className="grid grid-cols-2">
-                    <div className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                        <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center">🛍️</div>
-                        <div className="grow">
-                            <h4 className="font-semibold">Shopping</h4>
-                            <p className="text-xs text-gray-500">27th Oct 2025</p>
-                        </div>
-                        <div className="text-xs text-red-700 bg-red-200 px-2 rounded-full">- $12000</div>
-                    </div>
-                    <div className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                        <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center">🛍️</div>
-                        <div className="grow">
-                            <h4 className="font-semibold">Shopping</h4>
-                            <p className="text-xs text-gray-500">27th Oct 2025</p>
-                        </div>
-                        <div className="text-xs text-red-700 bg-red-200 px-2 rounded-full">- $12000</div>
-                    </div>
-                    <div className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                        <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center">🛍️</div>
-                        <div className="grow">
-                            <h4 className="font-semibold">Shopping</h4>
-                            <p className="text-xs text-gray-500">27th Oct 2025</p>
-                        </div>
-                        <div className="text-xs text-red-700 bg-red-200 px-2 rounded-full">- $12000</div>
-                    </div>
-                    <div className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                        <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center">🛍️</div>
-                        <div className="grow">
-                            <h4 className="font-semibold">Shopping</h4>
-                            <p className="text-xs text-gray-500">27th Oct 2025</p>
-                        </div>
-                        <div className="text-xs text-red-700 bg-red-200 px-2 rounded-full">- $12000</div>
-                    </div>
-                    <div className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                        <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center">🛍️</div>
-                        <div className="grow">
-                            <h4 className="font-semibold">Shopping</h4>
-                            <p className="text-xs text-gray-500">27th Oct 2025</p>
-                        </div>
-                        <div className="text-xs text-red-700 bg-red-200 px-2 rounded-full">- $12000</div>
-                    </div>
-                    <div className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                        <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center">🛍️</div>
-                        <div className="grow">
-                            <h4 className="font-semibold">Shopping</h4>
-                            <p className="text-xs text-gray-500">27th Oct 2025</p>
-                        </div>
-                        <div className="text-xs text-red-700 bg-red-200 px-2 rounded-full">- $12000</div>
-                    </div>
-                    <div className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                        <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center">🛍️</div>
-                        <div className="grow">
-                            <h4 className="font-semibold">Shopping</h4>
-                            <p className="text-xs text-gray-500">27th Oct 2025</p>
-                        </div>
-                        <div className="text-xs text-red-700 bg-red-200 px-2 rounded-full">- $12000</div>
-                    </div>
-                    <div className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                        <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center">🛍️</div>
-                        <div className="grow">
-                            <h4 className="font-semibold">Shopping</h4>
-                            <p className="text-xs text-gray-500">27th Oct 2025</p>
-                        </div>
-                        <div className="text-xs text-red-700 bg-red-200 px-2 rounded-full">- $12000</div>
-                    </div>
+                    {expense.length > 0 ? (
+                        expense.map((exp) => (
+                            <div key={exp.id} className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
+                                <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center">🛍️</div>
+                                <div className="grow">
+                                    <h4 className="font-semibold">{exp.category}</h4>
+                                    <p className="text-xs text-gray-500">{new Date(exp.date).toLocaleString()}</p>
+                                </div>
+                                <div className={`text-xs ${exp.type === "income" ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"} px-2 rounded-full`}>
+                                    {exp.type === "income" ? <span>+</span> : <span>-</span>} {exp.amount}
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No Expense</p>
+                    )}
                 </div>
             </div>
             {addModalOpen && <AddTransactionPopUp type="Expense" closePopup={() => setAddModalOpen(false)} submit={handleAddExpense} />}
