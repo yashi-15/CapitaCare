@@ -7,6 +7,7 @@ import AddTransactionPopUp from "../../components/AddTransactionPopUp";
 import { UserContext } from "../../context/userContext";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
+import Loader from "../../components/Loader";
 
 const Expense = () => {
     const data = [
@@ -57,6 +58,7 @@ const Expense = () => {
     const { user } = useContext(UserContext);
 
     const [addModalOpen, setAddModalOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleAddExpense = async (category, amount, date, note) => {
         const data = {
@@ -80,22 +82,31 @@ const Expense = () => {
     };
 
     const [expense, setExpense] = useState([]);
-    
-        const fetchExpense = async () => {
-            try {
-                const response = await axiosInstance.get(API_PATHS.TRANSACTION.FETCH);
-                if (response.status == 200) {
-                    const data = response.data.filter((item) => item.type === 'expense')
-                    setExpense(data);
-                }
-            } catch (err) {
-                alert(err);
+
+    const fetchExpense = async () => {
+        try {
+            setLoading(true);
+            const response = await axiosInstance.get(API_PATHS.TRANSACTION.FETCH);
+            if (response.status == 200) {
+                const data = response.data.filter((item) => item.type === "expense");
+                setExpense(data);
+                setLoading(false);
             }
-        };
-    
-        useEffect(() => {
-            fetchExpense();
-        }, []);
+        } catch (err) {
+            setLoading(false);
+            alert(err);
+        }
+    };
+
+    useEffect(() => {
+        fetchExpense();
+    }, []);
+
+    if (loading) {
+            return(
+                <Loader />
+            )
+        }
 
     return (
         <div className="py-3">
@@ -128,24 +139,24 @@ const Expense = () => {
                         <FiDownload /> Download
                     </button>
                 </div>
-                <div className="grid grid-cols-2">
-                    {expense.length > 0 ? (
-                        expense.map((exp) => (
-                            <div key={exp.id} className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                                <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center">🛍️</div>
-                                <div className="grow">
-                                    <h4 className="font-semibold">{exp.category}</h4>
-                                    <p className="text-xs text-gray-500">{new Date(exp.date).toLocaleString()}</p>
+                    <div className="grid grid-cols-2">
+                        {expense.length > 0 ? (
+                            expense.map((exp) => (
+                                <div key={exp.id} className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
+                                    <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center">🛍️</div>
+                                    <div className="grow">
+                                        <h4 className="font-semibold">{exp.category}</h4>
+                                        <p className="text-xs text-gray-500">{new Date(exp.date).toLocaleString()}</p>
+                                    </div>
+                                    <div className={`text-xs ${exp.type === "income" ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"} px-2 rounded-full`}>
+                                        {exp.type === "income" ? <span>+</span> : <span>-</span>} {exp.amount}
+                                    </div>
                                 </div>
-                                <div className={`text-xs ${exp.type === "income" ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"} px-2 rounded-full`}>
-                                    {exp.type === "income" ? <span>+</span> : <span>-</span>} {exp.amount}
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <p>No Expense</p>
-                    )}
-                </div>
+                            ))
+                        ) : (
+                            <p>No Expense</p>
+                        )}
+                    </div>
             </div>
             {addModalOpen && <AddTransactionPopUp type="Expense" closePopup={() => setAddModalOpen(false)} submit={handleAddExpense} />}
         </div>

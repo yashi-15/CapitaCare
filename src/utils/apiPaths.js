@@ -11,5 +11,6 @@ export const API_PATHS = {
         ADD: "/api/transactions",
         UPDATE: (transactionId) => `/api/transactions/${transactionId}`,
         DELETE: (transactionId) => `/api/transactions/${transactionId}`
-    }
+    },
+    DASHBOARD: "/api/dashboard"
 }

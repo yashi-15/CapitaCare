@@ -6,6 +6,7 @@ import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis
 import AddTransactionPopUp from "../../components/AddTransactionPopUp";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
+import Loader from "../../components/Loader";
 
 const Transactions = () => {
     const data = [
@@ -54,14 +55,18 @@ const Transactions = () => {
     ];
 
     const [transactions, setTransactions] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const fetchTransactions = async () => {
         try {
+            setLoading(true);
             const response = await axiosInstance.get(API_PATHS.TRANSACTION.FETCH);
             if (response.status == 200) {
                 setTransactions(response.data);
+                setLoading(false);
             }
         } catch (err) {
+            setLoading(false);
             alert(err);
         }
     };
@@ -69,6 +74,12 @@ const Transactions = () => {
     useEffect(() => {
         fetchTransactions();
     }, []);
+
+    if (loading) {
+        return(
+            <Loader />
+        )
+    }
 
     return (
         <div className="py-3">
@@ -102,25 +113,25 @@ const Transactions = () => {
                     <button className="flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium">
                         <FiDownload /> Download
                     </button>
-                </div>
-                <div className="grid grid-cols-2">
-                    {transactions.length > 0 ? (
-                        transactions.map((transac) => (
-                            <div key={transac.id} className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                                <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center">🛍️</div>
-                                <div className="grow">
-                                    <h4 className="font-semibold">{transac.category}</h4>
-                                    <p className="text-xs text-gray-500">{new Date(transac.date).toLocaleString()}</p>
+                </div> 
+                    <div className="grid grid-cols-2">
+                        {transactions.length > 0 ? (
+                            transactions.map((transac) => (
+                                <div key={transac.id} className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
+                                    <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center">🛍️</div>
+                                    <div className="grow">
+                                        <h4 className="font-semibold">{transac.category}</h4>
+                                        <p className="text-xs text-gray-500">{new Date(transac.date).toLocaleString()}</p>
+                                    </div>
+                                    <div className={`text-xs ${transac.type === "income" ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"} px-2 rounded-full`}>
+                                        {transac.type === "income" ? <span>+</span> : <span>-</span>} {transac.amount}
+                                    </div>
                                 </div>
-                                <div className={`text-xs ${transac.type === "income" ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"} px-2 rounded-full`}>
-                                    {transac.type === "income" ? <span>+</span> : <span>-</span>} {transac.amount}
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <p>No transactions</p>
-                    )}
-                </div>
+                            ))
+                        ) : (
+                            <p>No transactions</p>
+                        )}
+                    </div>
             </div>
         </div>
     );

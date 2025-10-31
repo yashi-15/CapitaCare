@@ -5,6 +5,7 @@ const path = require("path");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes")
 const transactionRoutes = require("./routes/transactionRoutes")
+const reportsRoutes = require("./routes/reportsRoutes")
 
 const app = express();
 
@@ -22,6 +23,7 @@ connectDB();
 
 app.use("/api/auth", authRoutes)
 app.use("/api/transactions", transactionRoutes)
+app.use("/api/dashboard", reportsRoutes)
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
