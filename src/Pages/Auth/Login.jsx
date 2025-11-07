@@ -7,7 +7,7 @@ import { UserContext } from "../../context/userContext";
 
 const Login = () => {
 
-    const {updateUser} = useContext(UserContext)
+    const {updateUser, setIsAuthenticated} = useContext(UserContext)
     const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
@@ -25,6 +25,7 @@ const Login = () => {
             if (token) {
                 localStorage.setItem("token", token);
                 updateUser(user)
+                setIsAuthenticated(true)
                 navigate("/dashboard");
             }
         } catch (error) {

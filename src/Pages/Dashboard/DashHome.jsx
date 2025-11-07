@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { GiPayMoney, GiReceiveMoney } from "react-icons/gi";
 import { GrMoney } from "react-icons/gr";
 import { IoWalletSharp } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Bar, BarChart, Label, LabelList, Legend, Pie, PieChart, Tooltip, XAxis, YAxis } from "recharts";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import Loader from "../../components/Loader";
+import { UserContext } from "../../context/userContext";
 
 const DashHome = () => {
     const [loading, setLoading] = useState(false);
@@ -77,7 +78,15 @@ const DashHome = () => {
         }
     };
 
+    const {isAuthenticated} = useContext(UserContext)
+    const navigate = useNavigate()
+    
+
     useEffect(() => {
+        if(!isAuthenticated){
+            navigate('/login')
+        }
+
         fetchDashData();
     }, []);
 
@@ -137,7 +146,7 @@ const DashHome = () => {
                                                 <h4 className="font-semibold">{transac.category}</h4>
                                                 <p className="text-xs text-gray-500">{new Date(transac.date).toLocaleString()}</p>
                                             </div>
-                                            <div className="text-xs text-green-700 bg-green-200 px-2 rounded-full">+ Rs. {transac.amount}</div>
+                                            <div className={`text-xs ${transac.type === 'income' ? 'text-green-700 bg-green-200':'text-red-700 bg-red-200'} px-2 rounded-full`}>+ Rs. {transac.amount}</div>
                                         </div>
                                     </li>
                                 );
