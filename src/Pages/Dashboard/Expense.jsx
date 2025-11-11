@@ -10,50 +10,6 @@ import { API_PATHS } from "../../utils/apiPaths";
 import Loader from "../../components/Loader";
 
 const Expense = () => {
-    const data = [
-        {
-            name: "Page A",
-            uv: 4000,
-            pv: 2400,
-            amt: 2400,
-        },
-        {
-            name: "Page B",
-            uv: 3000,
-            pv: 1398,
-            amt: 2210,
-        },
-        {
-            name: "Page C",
-            uv: 2000,
-            pv: 9800,
-            amt: 2290,
-        },
-        {
-            name: "Page D",
-            uv: 2780,
-            pv: 3908,
-            amt: 2000,
-        },
-        {
-            name: "Page E",
-            uv: 1890,
-            pv: 4800,
-            amt: 2181,
-        },
-        {
-            name: "Page F",
-            uv: 2390,
-            pv: 3800,
-            amt: 2500,
-        },
-        {
-            name: "Page G",
-            uv: 3490,
-            pv: 4300,
-            amt: 2100,
-        },
-    ];
 
     const { user } = useContext(UserContext);
 
@@ -118,17 +74,17 @@ const Expense = () => {
                     </button>
                 </div>
                 <div className="flex justify-center items-center mt-6">
-                    <AreaChart style={{ width: "960%", height: "100%", maxHeight: "35vh", aspectRatio: 1.618 }} responsive data={data} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
+                    <AreaChart style={{ width: "960%", height: "100%", maxHeight: "35vh", aspectRatio: 1.618 }} responsive data={expense} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
                         <defs>
                             <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="5%" stopColor="#A664FF" stopOpacity={0.8} />
                                 <stop offset="95%" stopColor="#A664FF" stopOpacity={0} />
                             </linearGradient>
                         </defs>
-                        <XAxis dataKey="name" tickLine={false} axisLine={false} style={{ fontSize: "12px" }} />
+                        <XAxis dataKey="category" tickLine={false} axisLine={false} style={{ fontSize: "12px" }} />
                         <YAxis width="auto" tickLine={false} axisLine={false} style={{ fontSize: "12px" }} />
                         <Tooltip />
-                        <Area type="monotone" dataKey="pv" stroke="#A664FF" strokeWidth={3} fill="url(#colorPv)" activeDot={{ r: 8 }} dot={{ fill: "#A664FF" }} />
+                        <Area type="monotone" dataKey="amount" stroke="#A664FF" strokeWidth={3} fill="url(#colorPv)" activeDot={{ r: 8 }} dot={{ fill: "#A664FF" }} />
                     </AreaChart>
                 </div>
             </div>

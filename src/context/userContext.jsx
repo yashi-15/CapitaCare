@@ -6,25 +6,6 @@ export const UserContext = createContext();
 
 const UserProvider = ({ children }) =>{
     const [user, setUser] = useState(null)
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
-
-    const fetchUserData = async() => {
-        try{
-            const response = await axiosInstance.get(API_PATHS.AUTH.GET_USER_INFO)
-            if(response.status(200)){
-                setUser(response.data)
-                setIsAuthenticated(true)
-            }
-        }
-        catch(err){
-            setIsAuthenticated(false)
-            alert('Not authenticated')
-        }
-    }
-
-    useEffect(()=>{
-        fetchUserData()
-    },[])
 
     const updateUser = (userData) => {
         setUser(userData)
@@ -35,7 +16,7 @@ const UserProvider = ({ children }) =>{
     }
 
     return (
-        <UserContext.Provider value={{ isAuthenticated, setIsAuthenticated, user, updateUser, clearUser}} >{children}</UserContext.Provider>
+        <UserContext.Provider value={{ user, updateUser, clearUser}} >{children}</UserContext.Provider>
     )
 }
 

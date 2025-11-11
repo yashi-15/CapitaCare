@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { GiPayMoney, GiReceiveMoney } from "react-icons/gi";
 import { GrMoney } from "react-icons/gr";
@@ -12,58 +12,6 @@ import { UserContext } from "../../context/userContext";
 
 const DashHome = () => {
     const [loading, setLoading] = useState(false);
-
-    const data = [
-        { name: "Group A", value: 400, fill: "#2848ff" },
-        { name: "Group B", value: 300, fill: "#36932e" },
-        { name: "Group C", value: 300, fill: "#FFBB28" },
-    ];
-    // #region Sample data
-    const data2 = [
-        {
-            name: "Page A",
-            uv: 4000,
-            pv: 2400,
-            amt: 2400,
-        },
-        {
-            name: "Page B",
-            uv: 3000,
-            pv: 1398,
-            amt: 2210,
-        },
-        {
-            name: "Page C",
-            uv: 2000,
-            pv: 9800,
-            amt: 2290,
-        },
-        {
-            name: "Page D",
-            uv: 2780,
-            pv: 3908,
-            amt: 2000,
-        },
-        {
-            name: "Page E",
-            uv: 1890,
-            pv: 4800,
-            amt: 2181,
-        },
-        {
-            name: "Page F",
-            uv: 2390,
-            pv: 3800,
-            amt: 2500,
-        },
-        {
-            name: "Page G",
-            uv: 3490,
-            pv: 4300,
-            amt: 2100,
-        },
-    ];
-
     const [dashData, setDashData] = useState({});
 
     const fetchDashData = async () => {
@@ -78,22 +26,12 @@ const DashHome = () => {
         }
     };
 
-    const {isAuthenticated} = useContext(UserContext)
-    const navigate = useNavigate()
-    
-
     useEffect(() => {
-        if(!isAuthenticated){
-            navigate('/login')
-        }
-
         fetchDashData();
     }, []);
 
     if (loading) {
-        return(
-            <Loader />
-        )
+        return <Loader />;
     }
 
     return (
@@ -146,7 +84,7 @@ const DashHome = () => {
                                                 <h4 className="font-semibold">{transac.category}</h4>
                                                 <p className="text-xs text-gray-500">{new Date(transac.date).toLocaleString()}</p>
                                             </div>
-                                            <div className={`text-xs ${transac.type === 'income' ? 'text-green-700 bg-green-200':'text-red-700 bg-red-200'} px-2 rounded-full`}>+ Rs. {transac.amount}</div>
+                                            <div className={`text-xs ${transac.type === "income" ? "text-green-700 bg-green-200" : "text-red-700 bg-red-200"} px-2 rounded-full`}>+ Rs. {transac.amount}</div>
                                         </div>
                                     </li>
                                 );
@@ -159,7 +97,7 @@ const DashHome = () => {
                         <h2 className="font-semibold">Financial Overview</h2>
                         <div className="flex justify-center items-center">
                             <PieChart style={{ width: "100%", maxWidth: "400px", maxHeight: "40vh", aspectRatio: 1, margin: "20px" }} responsive>
-                                <Pie data={data} innerRadius="80%" outerRadius="100%" cornerRadius="30%" fill="#8884d8" paddingAngle={4} dataKey="value" isAnimationActive={true} />
+                                <Pie data={dashData.recentTransactionPieChartData} innerRadius="80%" outerRadius="100%" cornerRadius="30%" fill="#8884d8" paddingAngle={4} dataKey="value" isAnimationActive={true} />
                                 <Legend iconType="circle" iconSize={10} wrapperStyle={{ fontSize: "12px", paddingTop: "30px" }} />
                             </PieChart>
                         </div>
@@ -197,11 +135,11 @@ const DashHome = () => {
                     <div className="p-4 h-full">
                         <h2 className="font-semibold">Last 30 Days Expenses</h2>
                         <div className="flex justify-center items-center h-full">
-                            <BarChart style={{ width: "100%", maxWidth: "400px", maxHeight: "40vh", aspectRatio: 1.618, margin: "20px" }} responsive data={data2}>
+                            <BarChart style={{ width: "100%", maxWidth: "400px", maxHeight: "40vh", aspectRatio: 1.618, margin: "20px" }} responsive data={dashData.recentExpenses}>
                                 <YAxis width="auto" axisLine={false} />
                                 <Tooltip />
-                                <Bar margin={{ top: 10, right: 0, left: 0, bottom: 30 }} dataKey="uv" fill="#A664FF" />
-                                <LabelList dataKey="name" position="bottom" />
+                                <Bar margin={{ top: 10, right: 0, left: 0, bottom: 30 }} dataKey="amount" fill="#A664FF" maxBarSize={30} />
+                                <LabelList dataKey="category" position="bottom" />
                             </BarChart>
                         </div>
                     </div>
@@ -213,7 +151,7 @@ const DashHome = () => {
                         <h2 className="font-semibold">Last 60 Days Income</h2>
                         <div className="flex justify-center items-center">
                             <PieChart style={{ width: "100%", maxWidth: "400px", maxHeight: "40vh", aspectRatio: 1, margin: "20px" }} responsive>
-                                <Pie data={data} innerRadius="80%" outerRadius="100%" cornerRadius="30%" fill="#8884d8" paddingAngle={4} dataKey="value" isAnimationActive={true} />
+                                <Pie data={dashData.recentIncomesPieChartData} innerRadius="80%" outerRadius="100%" cornerRadius="30%" fill="#8884d8" paddingAngle={4} dataKey="value" isAnimationActive={true} />
                                 <Legend iconType="circle" iconSize={10} wrapperStyle={{ fontSize: "12px", paddingTop: "30px" }} />
                             </PieChart>
                         </div>

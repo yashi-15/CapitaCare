@@ -20,17 +20,43 @@ exports.fetchReports = async (req, res) => {
         const recentIncomes = incomes.slice(0, 5);
         const recentExpenses = expenses.slice(0, 5);
 
-        // for (const transaction of transactions) {
-        //     if (transaction.type === "income" && recentIncomes.length < 5) {
-        //         recentIncomes.push(transaction);
-        //     } else if (transaction.type === "expense" && recentExpenses.length < 5) {
-        //         recentExpenses.push(transaction);
-        //     }
+        const colors = ["#2848ff", "#36932e", "#FFBB28", "#9b2929", "#bc3385"];
 
-        //     if (recentIncomes.length === 5 && recentExpenses.length === 5) break;
-        // }
+        //recent transaction pie chart data
+        const recentTransactionPieChartData = [];
 
-        return res.json({ totalBalance, totalIncome, totalExpense, recentTransactions, recentIncomes, recentExpenses });
+        recentTransactions.forEach((transaction, index) => {
+            const existingIndex = recentTransactionPieChartData.findIndex((item) => item.name.toLowerCase().trim() == transaction.category.toLowerCase().trim());
+
+            if (existingIndex !== -1) {
+                recentTransactionPieChartData[existingIndex].value += transaction.amount;
+            } else {
+                recentTransactionPieChartData.push({
+                    name: transaction.category.trim(),
+                    value: transaction.amount,
+                    fill: colors[index % colors.length ],
+                });
+            }
+        });
+
+        //recent incomes pie chart data
+        const recentIncomesPieChartData = [];
+
+        recentIncomes.forEach((transaction, index) => {
+            const existingIndex = recentIncomesPieChartData.findIndex((item) => item.name.toLowerCase().trim() == transaction.category.toLowerCase().trim());
+
+            if (existingIndex !== -1) {
+                recentIncomesPieChartData[existingIndex].value += transaction.amount;
+            } else {
+                recentIncomesPieChartData.push({
+                    name: transaction.category.trim(),
+                    value: transaction.amount,
+                    fill: colors[index % colors.length ],
+                });
+            }
+        });
+
+        return res.json({ totalBalance, totalIncome, totalExpense, recentTransactions, recentIncomes, recentExpenses, recentTransactionPieChartData, recentIncomesPieChartData });
     } catch (err) {
         res.status(500).json({ message: "Error fetching data", error: err.message });
     }
