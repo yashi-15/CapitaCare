@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
-import { FiDownload } from "react-icons/fi";
+import { FiArrowLeft, FiArrowRight, FiDownload } from "react-icons/fi";
 import { LuPlug, LuPlus } from "react-icons/lu";
 import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
 import AddTransactionPopUp from "../../components/AddTransactionPopUp";
@@ -15,6 +15,35 @@ const Expense = () => {
 
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    
+        const currentDate = new Date();
+        const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth() + 1);
+        const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+    
+        const monthNames = {
+            1: "January",
+            2: "February",
+            3: "March",
+            4: "April",
+            5: "May",
+            6: "June",
+            7: "July",
+            8: "August",
+            9: "Spetember",
+            10: "October",
+            11: "November",
+            12: "December",
+        };
+    
+        const updateMonth = (type) => {
+            const date = new Date(selectedYear, selectedMonth - 1);
+            date.setMonth(date.getMonth() + (type === "sub" ? -1 : 1));
+            setSelectedYear(date.getFullYear());
+            setSelectedMonth(date.getMonth() + 1);
+        };
+        const updateYear = (type) => {
+            setSelectedYear((prev) => prev + (type === "sub" ? -1 : 1));
+        };
 
     const handleAddExpense = async (emoji, category, amount, date, note) => {
         const data = {
@@ -43,9 +72,9 @@ const Expense = () => {
     const fetchExpense = async () => {
         try {
             setLoading(true);
-            const response = await axiosInstance.get(API_PATHS.TRANSACTION.FETCH);
+            const response = await axiosInstance.get(API_PATHS.TRANSACTION.FETCH + `?month=${selectedMonth}&year=${selectedYear}`);
             if (response.status == 200) {
-                const data = response.data.filter((item) => item.type === "expense");
+                const data = response.data.data.filter((item) => item.type === "expense");
                 setExpense(data);
                 setLoading(false);
             }
@@ -57,7 +86,7 @@ const Expense = () => {
 
     useEffect(() => {
         fetchExpense();
-    }, []);
+    }, [selectedMonth, selectedYear]);
 
     if (loading) {
             return(
@@ -96,6 +125,29 @@ const Expense = () => {
                         <FiDownload /> Download
                     </button>
                 </div>
+                <div className="p-4 flex justify-end gap-4">
+                                    <div className="flex justify-center gap-2">
+                                        <button onClick={() => updateMonth("sub")} className="flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium">
+                                            <FiArrowLeft />
+                                        </button>
+                                        <h2 className="font-semibold w-22 text-center">{monthNames[selectedMonth]}</h2>
+                                        <button
+                                            onClick={() => updateMonth("add")}
+                                            className={`${selectedYear === currentDate.getFullYear() && selectedMonth === currentDate.getMonth() + 1 ? "invisible" : ""} flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium`}
+                                        >
+                                            <FiArrowRight />
+                                        </button>
+                                    </div>
+                                    <div className="flex justify-center gap-2">
+                                        <button onClick={() => updateYear("sub")} className="flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium">
+                                            <FiArrowLeft />
+                                        </button>
+                                        <h2 className="font-semibold w-10 text-center">{selectedYear}</h2>
+                                        <button onClick={() => updateYear("add")} className={`${selectedYear === currentDate.getFullYear() ? "invisible" : ""} flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium`}>
+                                            <FiArrowRight />
+                                        </button>
+                                    </div>
+                                </div>
                     <div className="grid grid-cols-2">
                         {expense.length > 0 ? (
                             expense.map((exp) => (

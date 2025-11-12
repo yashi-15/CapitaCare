@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
-import { FiDownload } from "react-icons/fi";
+import { FiArrowLeft, FiArrowRight, FiDownload } from "react-icons/fi";
 import { LuPlug, LuPlus } from "react-icons/lu";
 import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
 import AddIncomePopUp from "../../components/AddTransactionPopUp";
@@ -15,6 +15,35 @@ const Income = () => {
 
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    const currentDate = new Date();
+    const [selectedMonth, setSelectedMonth] = useState(currentDate.getMonth() + 1);
+    const [selectedYear, setSelectedYear] = useState(currentDate.getFullYear());
+
+    const monthNames = {
+        1: "January",
+        2: "February",
+        3: "March",
+        4: "April",
+        5: "May",
+        6: "June",
+        7: "July",
+        8: "August",
+        9: "Spetember",
+        10: "October",
+        11: "November",
+        12: "December",
+    };
+
+    const updateMonth = (type) => {
+        const date = new Date(selectedYear, selectedMonth - 1);
+        date.setMonth(date.getMonth() + (type === "sub" ? -1 : 1));
+        setSelectedYear(date.getFullYear());
+        setSelectedMonth(date.getMonth() + 1);
+    };
+    const updateYear = (type) => {
+        setSelectedYear((prev) => prev + (type === "sub" ? -1 : 1));
+    };
 
     const handleAddIncome = async (emoji, category, amount, date, note) => {
         const data = {
@@ -43,9 +72,9 @@ const Income = () => {
     const fetchIncome = async () => {
         try {
             setLoading(true);
-            const response = await axiosInstance.get(API_PATHS.TRANSACTION.FETCH);
+            const response = await axiosInstance.get(API_PATHS.TRANSACTION.FETCH + `?month=${selectedMonth}&year=${selectedYear}`);
             if (response.status == 200) {
-                const data = response.data.filter((item) => item.type === "income");
+                const data = response.data.data.filter((item) => item.type === "income");
                 setIncome(data);
                 setLoading(false);
             }
@@ -57,12 +86,10 @@ const Income = () => {
 
     useEffect(() => {
         fetchIncome();
-    }, []);
+    }, [selectedMonth, selectedYear]);
 
     if (loading) {
-        return(
-            <Loader />
-        )
+        return <Loader />;
     }
 
     return (
@@ -96,24 +123,47 @@ const Income = () => {
                         <FiDownload /> Download
                     </button>
                 </div>
-                    <div className="grid grid-cols-2">
-                        {income.length > 0 ? (
-                            income.map((inc) => (
-                                <div key={inc.id} className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                                    <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center flex justify-center items-center">{<img src={inc.emoji || "https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f4b0.png"} width={24} /> }</div>
-                                    <div className="grow">
-                                        <h4 className="font-semibold">{inc.category}</h4>
-                                        <p className="text-xs text-gray-500">{new Date(inc.date).toLocaleString()}</p>
-                                    </div>
-                                    <div className={`text-xs ${inc.type === "income" ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"} px-2 rounded-full`}>
-                                        {inc.type === "income" ? <span>+</span> : <span>-</span>} {inc.amount}
-                                    </div>
-                                </div>
-                            ))
-                        ) : (
-                            <p>No Income</p>
-                        )}
+                <div className="p-4 flex justify-end gap-4">
+                    <div className="flex justify-center gap-2">
+                        <button onClick={() => updateMonth("sub")} className="flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium">
+                            <FiArrowLeft />
+                        </button>
+                        <h2 className="font-semibold w-22 text-center">{monthNames[selectedMonth]}</h2>
+                        <button
+                            onClick={() => updateMonth("add")}
+                            className={`${selectedYear === currentDate.getFullYear() && selectedMonth === currentDate.getMonth() + 1 ? "invisible" : ""} flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium`}
+                        >
+                            <FiArrowRight />
+                        </button>
                     </div>
+                    <div className="flex justify-center gap-2">
+                        <button onClick={() => updateYear("sub")} className="flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium">
+                            <FiArrowLeft />
+                        </button>
+                        <h2 className="font-semibold w-10 text-center">{selectedYear}</h2>
+                        <button onClick={() => updateYear("add")} className={`${selectedYear === currentDate.getFullYear() ? "invisible" : ""} flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium`}>
+                            <FiArrowRight />
+                        </button>
+                    </div>
+                </div>
+                <div className="grid grid-cols-2">
+                    {income.length > 0 ? (
+                        income.map((inc) => (
+                            <div key={inc.id} className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
+                                <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center flex justify-center items-center">{<img src={inc.emoji || "https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f4b0.png"} width={24} />}</div>
+                                <div className="grow">
+                                    <h4 className="font-semibold">{inc.category}</h4>
+                                    <p className="text-xs text-gray-500">{new Date(inc.date).toLocaleString()}</p>
+                                </div>
+                                <div className={`text-xs ${inc.type === "income" ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"} px-2 rounded-full`}>
+                                    {inc.type === "income" ? <span>+</span> : <span>-</span>} {inc.amount}
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No Income</p>
+                    )}
+                </div>
             </div>
             {addModalOpen && <AddTransactionPopUp type="Income" closePopup={() => setAddModalOpen(false)} submit={handleAddIncome} />}
         </div>

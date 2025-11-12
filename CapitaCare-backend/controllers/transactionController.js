@@ -8,8 +8,32 @@ exports.fetchTransactions = async (req, res) => {
     }
 
     try {
-        const transactions = await Transaction.find({ user: userId }).sort({ date: -1 });
-        return res.json(transactions);
+        const currentDate = new Date()
+        const month = parseInt(req.query.month) || (currentDate.getMonth() + 1)
+        const year = parseInt(req.query.year) || (currentDate.getFullYear())
+
+        if(month < 1 || month > 12){
+            return res.status(400).json({
+                message: "Month must be between 1 and 12"
+            })
+        }
+
+        const startDate = new Date(year, month -1, 1)
+        const endDate = new Date(year, month, 1)
+
+        const transactions = await Transaction.find({ user: userId, date: {
+            $gte: startDate,
+            $lte: endDate
+        } }).sort({ date: -1 });
+
+        const total = Transaction.length
+
+        return res.json({
+            data: transactions,
+            month: month,
+            year: year,
+            totalItems: total,
+        });
     } catch (err) {
         res.status(500).json({ message: "Error fetching transactions", error: err.message });
     }
