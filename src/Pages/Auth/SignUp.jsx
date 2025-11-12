@@ -7,7 +7,7 @@ import { UserContext } from "../../context/userContext";
 
 const SignUp = () => {
 
-    const {updateUser, setIsAuthenticated} = useContext(UserContext)
+    const {updateUser} = useContext(UserContext)
     const navigate = useNavigate();
     
         const [fullName, setFullName] = useState("");
@@ -27,7 +27,6 @@ const SignUp = () => {
                 if (token) {
                     localStorage.setItem("token", token);
                     updateUser(user)
-                    setIsAuthenticated(true)
                     navigate("/dashboard");
                 }
             } catch (error) {

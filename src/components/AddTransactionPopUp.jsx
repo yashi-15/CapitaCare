@@ -1,8 +1,10 @@
+import EmojiPicker from "emoji-picker-react";
 import React, { useState } from "react";
-import { FiImage } from "react-icons/fi";
 import { RxCross1 } from "react-icons/rx";
+import EmojiPickerModal from "./EmojiPickerModal";
 
 const AddTransactionPopUp = ({ type, closePopup, submit }) => {
+    const [emoji, setEmoji] = useState("");
     const [category, setCategory] = useState("");
     const [amount, setAmount] = useState("");
     const [date, setDate] = useState("");
@@ -19,12 +21,7 @@ const AddTransactionPopUp = ({ type, closePopup, submit }) => {
                     </button>
                 </div>
                 <div className="p-4 flex flex-col gap-6">
-                    <div className="flex gap-3 items-center">
-                        <div className="p-3 bg-accent rounded-md">
-                            <FiImage size={25} />
-                        </div>
-                        <div>Pick Icon</div>
-                    </div>
+                    <EmojiPickerModal icon={emoji} onSelect={(emoji)=> setEmoji(emoji)} />
                     <div className="flex flex-col gap-3">
                         <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Category" name="category" className=" bg-secondary/12 rounded-md p-2 focus:outline-secondary focus:outline-1" />
                         <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Amount" name="amount" className="bg-secondary/12 rounded-md p-2 focus:outline-secondary focus:outline-1" />
@@ -33,7 +30,7 @@ const AddTransactionPopUp = ({ type, closePopup, submit }) => {
                         {/* <input type='file' placeholder='Upload reciept' name='recipt' className="bg-secondary/12 rounded-md p-2 focus:outline-secondary focus:outline-1" /> */}
                     </div>
                     <div className="self-end">
-                        <button onClick={() => submit(category, amount, date, note)} className="bg-secondary text-white p-2 font-semibold rounded-md">
+                        <button onClick={() => submit(emoji, category, amount, date, note)} className="bg-secondary text-white p-2 font-semibold rounded-md">
                             Add {type}
                         </button>
                     </div>

@@ -15,7 +15,7 @@ exports.fetchTransactions = async (req, res) => {
     }
 };
 exports.addTransaction = async (req, res) => {
-    const { type, amount, category, date, note, receiptUrl } = req.body;
+    const { type, amount, emoji, category, date, note, receiptUrl } = req.body;
     const userId = req.user.id;
 
     if (!type || !amount || !category) {
@@ -39,6 +39,7 @@ exports.addTransaction = async (req, res) => {
             user: userId,
             type,
             amount,
+            emoji,
             category,
             date: date ? new Date(date) : Date.now(),
             note,
@@ -64,7 +65,7 @@ exports.addTransaction = async (req, res) => {
     }
 };
 exports.updateTransaction = async (req, res) => {
-    const { type, amount, category, date, note, receiptUrl } = req.body;
+    const { type, amount, emoji, category, date, note, receiptUrl } = req.body;
 
     if (type && !["income", "expense"].includes(type)) {
         res.status(400).json({ message: "Type must be 'income' or 'expense'" });
@@ -80,7 +81,7 @@ exports.updateTransaction = async (req, res) => {
     try {
         const transaction = await Transaction.findOneAndUpdate(
             { _id: req.params.id, user: req.user._id },
-            { type, amount, category, date, note, receiptUrl },
+            { type, amount, emoji, category, date, note, receiptUrl },
             {
                 new: true,
                 runValidators: true,

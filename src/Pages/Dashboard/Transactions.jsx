@@ -118,7 +118,7 @@ const Transactions = () => {
                         {transactions.length > 0 ? (
                             transactions.map((transac) => (
                                 <div key={transac.id} className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                                    <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center">🛍️</div>
+                                    <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center flex justify-center items-center">{<img src={transac.emoji || "https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f4b0.png"} width={24} /> }</div>
                                     <div className="grow">
                                         <h4 className="font-semibold">{transac.category}</h4>
                                         <p className="text-xs text-gray-500">{new Date(transac.date).toLocaleString()}</p>

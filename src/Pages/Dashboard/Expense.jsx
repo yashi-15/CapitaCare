@@ -16,10 +16,11 @@ const Expense = () => {
     const [addModalOpen, setAddModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const handleAddExpense = async (category, amount, date, note) => {
+    const handleAddExpense = async (emoji, category, amount, date, note) => {
         const data = {
             user: user.id,
             type: "expense",
+            emoji,
             category,
             amount,
             date,
@@ -99,7 +100,7 @@ const Expense = () => {
                         {expense.length > 0 ? (
                             expense.map((exp) => (
                                 <div key={exp.id} className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                                    <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center">🛍️</div>
+                                    <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center flex justify-center items-center">{<img src={exp.emoji || "https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f4b0.png"} width={24} /> }</div>
                                     <div className="grow">
                                         <h4 className="font-semibold">{exp.category}</h4>
                                         <p className="text-xs text-gray-500">{new Date(exp.date).toLocaleString()}</p>
