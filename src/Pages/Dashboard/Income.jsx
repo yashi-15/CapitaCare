@@ -96,9 +96,9 @@ const Income = () => {
     return (
         <div className="py-3">
             <div className="bg-white p-3 rounded-md shadow-md my-3">
-                <div className="p-4 flex justify-between">
-                    <h2 className="font-semibold">Income Overview</h2>
-                    <button onClick={() => setAddModalOpen(true)} className="flex items-center gap-2 rounded-sm px-2 py-1 text-sm bg-primary/15 text-primary hover:scale-96 font-medium">
+                <div className="p-3 lg:p-4 flex justify-between">
+                    <h2 className="text-xs md:text-sm lg:text-base font-semibold">Income Overview</h2>
+                    <button onClick={() => setAddModalOpen(true)} className="flex items-center gap-2 rounded-sm px-2 py-1 text-[9px] md:text-xs text-sm bg-primary/15 text-primary hover:scale-96 font-medium">
                         <LuPlus /> Add Income
                     </button>
                 </div>
@@ -118,36 +118,36 @@ const Income = () => {
                 </div>
             </div>
             <div className="rounded-md p-3 bg-white shadow-md my-3">
-                <div className="p-4 flex justify-between">
-                    <h2 className="font-semibold">Income Sources</h2>
-                    <button className="flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium">
+                <div className="p-3 lg:p-4 flex justify-between">
+                    <h2 className="text-xs md:text-sm lg:text-base font-semibold">Income Sources</h2>
+                    <button className="flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-[9px] md:text-xs hover:bg-primary/15 hover:text-primary font-medium">
                         <FiDownload /> Download
                     </button>
                 </div>
                 <div className="p-4 flex justify-end gap-4">
                     <div className="flex justify-center gap-2">
-                        <button onClick={() => updateMonth("sub")} className="flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium">
+                        <button onClick={() => updateMonth("sub")} className="flex items-center gap-2 bg-accent rounded-sm px-1 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium">
                             <FiArrowLeft />
                         </button>
-                        <h2 className="font-semibold w-22 text-center">{monthNames[selectedMonth]}</h2>
+                        <h2 className="text-[9px] sm:text-xs md:text-sm lg:text-base font-semibold w-12 sm:w-18 lg:w-22 text-center">{monthNames[selectedMonth]}</h2>
                         <button
                             onClick={() => updateMonth("add")}
-                            className={`${selectedYear === currentDate.getFullYear() && selectedMonth === currentDate.getMonth() + 1 ? "invisible" : ""} flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium`}
+                            className={`${selectedYear === currentDate.getFullYear() && selectedMonth === currentDate.getMonth() + 1 ? "invisible" : ""} flex items-center gap-2 bg-accent rounded-sm px-1 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium`}
                         >
                             <FiArrowRight />
                         </button>
                     </div>
                     <div className="flex justify-center gap-2">
-                        <button onClick={() => updateYear("sub")} className="flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium">
+                        <button onClick={() => updateYear("sub")} className="flex items-center gap-2 bg-accent rounded-sm px-1 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium">
                             <FiArrowLeft />
                         </button>
-                        <h2 className="font-semibold w-10 text-center">{selectedYear}</h2>
-                        <button onClick={() => updateYear("add")} className={`${selectedYear === currentDate.getFullYear() ? "invisible" : ""} flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium`}>
+                        <h2 className="text-[9px] sm:text-xs md:text-sm lg:text-base font-semibold sm:w-8 lg:w-10 text-center">{selectedYear}</h2>
+                        <button onClick={() => updateYear("add")} className={`${selectedYear === currentDate.getFullYear() ? "invisible" : ""} flex items-center gap-2 bg-accent rounded-sm px-1 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium`}>
                             <FiArrowRight />
                         </button>
                     </div>
                 </div>
-                <div className="grid grid-cols-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2">
                     {income.length > 0 ? (
                         income.map((inc) => (
                             <TransactionItem transaction={inc} />
