@@ -4,6 +4,7 @@ import RightSection from "./RightSection";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import { UserContext } from "../../context/userContext";
+import showToast from "../../utils/showToast";
 
 const Login = () => {
 
@@ -25,10 +26,11 @@ const Login = () => {
             if (token) {
                 localStorage.setItem("token", token);
                 updateUser(user)
+                showToast(true, "Logged in successfuly")
                 navigate("/dashboard");
             }
         } catch (error) {
-            alert(error);
+            showToast( false, error);
         }
     };
 

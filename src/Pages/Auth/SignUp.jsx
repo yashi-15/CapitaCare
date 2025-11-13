@@ -27,10 +27,11 @@ const SignUp = () => {
                 if (token) {
                     localStorage.setItem("token", token);
                     updateUser(user)
+                    showToast(true, "Sign up successfuly")
                     navigate("/dashboard");
                 }
             } catch (error) {
-                alert(error);
+                showToast(false, error)
             }
         };
 

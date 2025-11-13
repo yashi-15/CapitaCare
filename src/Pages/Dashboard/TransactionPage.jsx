@@ -9,6 +9,7 @@ import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import Loader from "../../components/Loader";
 import TransactionItem from "../../components/TransactionItem";
+import showToast from "../../utils/showToast";
 
 const TransactionPage = ({type}) => {
     const capitalizedType = type.charAt(0).toUpperCase() + type.slice(1)
@@ -59,10 +60,10 @@ const TransactionPage = ({type}) => {
         try {
             const response = await axiosInstance.post(API_PATHS.TRANSACTION.ADD, data);
             if (response.status == 200) {
-                alert("yayyy");
+                showToast(true, "Transaction added")
             }
         } catch (error) {
-            alert(error);
+            showToast(false, error)
         } finally {
             setAddModalOpen(false);
         }

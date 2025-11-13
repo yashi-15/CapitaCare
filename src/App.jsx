@@ -9,6 +9,7 @@ import Income from "./Pages/Dashboard/Income";
 import Expense from "./Pages/Dashboard/Expense";
 import Transactions from "./Pages/Dashboard/Transactions";
 import UserProvider from "./context/userContext";
+import { Toaster } from "react-hot-toast";
 
 function App() {
     return (
@@ -27,6 +28,7 @@ function App() {
                         </Route>
                     </Routes>
                 </BrowserRouter>
+                <Toaster />
             </UserProvider>
         </>
     );
