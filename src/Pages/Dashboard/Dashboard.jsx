@@ -18,7 +18,7 @@ const Dashboard = () => {
             <div className="flex h-screen">
                 <aside className="w-12 sm:w-16 md:w-44 lg:w-64 bg-white p-2 md:p-4 flex flex-col gap-6">
                     <div className="flex flex-col gap-4">
-                        <div className="flex gap-0 items-center">
+                        <div className="flex gap-0 items-center justify-center md:justify-start">
                             <img src="logo.png" width={"19px"} height={"50px"} />
                             <h1 className="text-lg font-semibold"><span className="hidden md:block">apitaCare</span></h1>
                         </div>

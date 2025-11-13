@@ -33,14 +33,14 @@ const Login = () => {
     };
 
     return (
-        <div className="flex h-screen bg-light">
-            <div className="basis-2/3 flex justify-center items-center">
-                <div className="w-sm">
+        <div className="flex h-screen justify-center bg-light">
+            <div className="sm:basis-2/3 flex justify-center items-center">
+                <div className="w-70 sm:w-100">
                     <div className="my-8 mx-4">
-                        <h1 className="text-center text-4xl font-bold mb-4">Welcome back</h1>
-                        <p className="text-center">Welcome back! Please enter your details</p>
+                        <h1 className="text-center text-3xl sm:text-4xl font-bold mb-4">Welcome back</h1>
+                        <p className="text-sm sm:text-base text-center">Welcome back! Please enter your details</p>
                     </div>
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-3 w-[80%] mx-auto">
                         <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} name="email" placeholder="Email" className="border border-primary rounded-md p-2 focus:outline-primary focus:outline-1" />
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} name="password" placeholder="Password" className="border border-primary rounded-md p-2 focus:outline-primary focus:outline-1" />
                         <button onClick={handleSubmit} className="bg-primary text-white p-2 font-semibold rounded-full">
@@ -48,7 +48,7 @@ const Login = () => {
                         </button>
                     </div>
                     <div className="my-4">
-                        <p className="text-center">
+                        <p className="text-sm sm:text-base text-center">
                             Don't have an account?{" "}
                             <Link to={"/signup"}>
                                 <span className="text-primary font-semibold">Sign up</span>
