@@ -7,6 +7,7 @@ import AddTransactionPopUp from "../../components/AddTransactionPopUp";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import Loader from "../../components/Loader";
+import TransactionItem from "../../components/TransactionItem";
 
 const Transactions = () => {
     const data = [
@@ -167,16 +168,7 @@ const Transactions = () => {
                 <div className="grid grid-cols-2">
                     {transactions.length > 0 ? (
                         transactions.map((transac) => (
-                            <div key={transac.id} className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                                <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center flex justify-center items-center">{<img src={transac.emoji || "https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f4b0.png"} width={24} />}</div>
-                                <div className="grow">
-                                    <h4 className="font-semibold">{transac.category}</h4>
-                                    <p className="text-xs text-gray-500">{new Date(transac.date).toLocaleString()}</p>
-                                </div>
-                                <div className={`text-xs ${transac.type === "income" ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"} px-2 rounded-full`}>
-                                    {transac.type === "income" ? <span>+</span> : <span>-</span>} {transac.amount}
-                                </div>
-                            </div>
+                            <TransactionItem transaction={transac} />
                         ))
                     ) : (
                         <p>No transactions</p>

@@ -9,6 +9,7 @@ import { UserContext } from "../../context/userContext";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import Loader from "../../components/Loader";
+import TransactionItem from "../../components/TransactionItem";
 
 const Income = () => {
     const { user } = useContext(UserContext);
@@ -49,7 +50,7 @@ const Income = () => {
         const data = {
             user: user.id,
             type: "income",
-            emoji,
+            emoji: emoji || "https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f4b0.png" ,
             category,
             amount,
             date,
@@ -149,16 +150,7 @@ const Income = () => {
                 <div className="grid grid-cols-2">
                     {income.length > 0 ? (
                         income.map((inc) => (
-                            <div key={inc.id} className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                                <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center flex justify-center items-center">{<img src={inc.emoji || "https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f4b0.png"} width={24} />}</div>
-                                <div className="grow">
-                                    <h4 className="font-semibold">{inc.category}</h4>
-                                    <p className="text-xs text-gray-500">{new Date(inc.date).toLocaleString()}</p>
-                                </div>
-                                <div className={`text-xs ${inc.type === "income" ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"} px-2 rounded-full`}>
-                                    {inc.type === "income" ? <span>+</span> : <span>-</span>} {inc.amount}
-                                </div>
-                            </div>
+                            <TransactionItem transaction={inc} />
                         ))
                     ) : (
                         <p>No Income</p>

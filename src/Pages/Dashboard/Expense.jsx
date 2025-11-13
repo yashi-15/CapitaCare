@@ -8,6 +8,7 @@ import { UserContext } from "../../context/userContext";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import Loader from "../../components/Loader";
+import TransactionItem from "../../components/TransactionItem";
 
 const Expense = () => {
 
@@ -49,7 +50,7 @@ const Expense = () => {
         const data = {
             user: user.id,
             type: "expense",
-            emoji,
+            emoji: emoji || "https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f4b0.png" ,
             category,
             amount,
             date,
@@ -151,16 +152,7 @@ const Expense = () => {
                     <div className="grid grid-cols-2">
                         {expense.length > 0 ? (
                             expense.map((exp) => (
-                                <div key={exp.id} className="my-2 px-5 py-3 flex items-center gap-3 hover:bg-accent">
-                                    <div className="p-1 rounded-full bg-accent w-10 h-10 text-xl text-center flex justify-center items-center">{<img src={exp.emoji || "https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f4b0.png"} width={24} /> }</div>
-                                    <div className="grow">
-                                        <h4 className="font-semibold">{exp.category}</h4>
-                                        <p className="text-xs text-gray-500">{new Date(exp.date).toLocaleString()}</p>
-                                    </div>
-                                    <div className={`text-xs ${exp.type === "income" ? "text-green-700 bg-green-100" : "text-red-700 bg-red-100"} px-2 rounded-full`}>
-                                        {exp.type === "income" ? <span>+</span> : <span>-</span>} {exp.amount}
-                                    </div>
-                                </div>
+                                <TransactionItem transaction={exp} />
                             ))
                         ) : (
                             <p>No Expense</p>

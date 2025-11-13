@@ -11,13 +11,12 @@ const AddTransactionPopUp = ({ type, closePopup, submit }) => {
     const [note, setNote] = useState("");
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 ">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
             <div className="w-xl bg-white">
                 <div className="flex justify-between gap-2 p-4 border-b border-accent">
                     <h1 className="font-semibold">Add {type} </h1>
                     <button onClick={closePopup} className="text-secondary">
-                        {" "}
-                        <RxCross1 />{" "}
+                        <RxCross1 />
                     </button>
                 </div>
                 <div className="p-4 flex flex-col gap-6">
