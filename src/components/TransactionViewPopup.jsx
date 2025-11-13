@@ -92,7 +92,7 @@ const TransactionViewPopup = ({ transaction, closePopup }) => {
                         <h2 className={`${transaction.type === "income" ? "text-green-700 bg-green-200" : "text-red-700 bg-red-200"} px-2 w-fit rounded-full text-xl font-semibold`}>
                             {transaction.type === "income" ? <span>+</span> : <span>-</span>} {transaction.amount}
                         </h2>
-                        <h2 className="text-gray-500 text-sm">{new Date(transaction.date).toLocaleString()}</h2>
+                        <h2 className="text-gray-500 text-sm">{new Date(transaction.date).toDateString()}</h2>
                         <div className="mt-3">
                             <h2 className="text-sm">Note</h2>
                             <div className="bg-accent min-h-20 p-2">
