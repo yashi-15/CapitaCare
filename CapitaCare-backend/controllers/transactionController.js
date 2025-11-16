@@ -28,8 +28,39 @@ exports.fetchTransactions = async (req, res) => {
 
         const total = Transaction.length
 
+        //for chart data
+        const getWeekNumber = (date) => {
+            const dateNum = new Date(date).getDate()
+            return Math.ceil(dateNum/7)
+        }
+
+        const weeklyData = {
+            "week1": {income: 0, expense: 0},
+            "week2": {income: 0, expense: 0},
+            "week3": {income: 0, expense: 0},
+            "week4": {income: 0, expense: 0},
+            "week5": {income: 0, expense: 0}
+        }
+
+        transactions.forEach((transaction)=>{
+            const weekNum = getWeekNumber(transaction.date)
+            const weekName = `week${weekNum}`
+            if (weeklyData[weekName]) {
+            weeklyData[weekName][transaction.type] += transaction.amount;
+        }
+        })
+
+        const chartData = Object.keys(weeklyData).map((weekKey, index)=> ({
+            week: index +1,
+            weekLabel: `Week ${index +1}`,
+            income: weeklyData[weekKey].income,
+            expense: weeklyData[weekKey].expense,
+            net: weeklyData[weekKey].income - weeklyData[weekKey].expense
+        }))
+
         return res.json({
             data: transactions,
+            chartData,
             month: month,
             year: year,
             totalItems: total,
