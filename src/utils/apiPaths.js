@@ -10,7 +10,8 @@ export const API_PATHS = {
         FETCH: "/api/transactions",
         ADD: "/api/transactions",
         UPDATE: (transactionId) => `/api/transactions/${transactionId}`,
-        DELETE: (transactionId) => `/api/transactions/${transactionId}`
+        DELETE: (transactionId) => `/api/transactions/${transactionId}`,
+        DOWNLOAD: "/api/transactions/downloadexcel"
     },
     DASHBOARD: "/api/dashboard"
 }

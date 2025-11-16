@@ -11,8 +11,8 @@ import Loader from "../../components/Loader";
 import TransactionItem from "../../components/TransactionItem";
 import showToast from "../../utils/showToast";
 
-const TransactionPage = ({type}) => {
-    const capitalizedType = type.charAt(0).toUpperCase() + type.slice(1)
+const TransactionPage = ({ type }) => {
+    const capitalizedType = type.charAt(0).toUpperCase() + type.slice(1);
     const { user } = useContext(UserContext);
 
     const [addModalOpen, setAddModalOpen] = useState(false);
@@ -51,7 +51,7 @@ const TransactionPage = ({type}) => {
         const data = {
             user: user.id,
             type: type,
-            emoji: emoji || "https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f4b0.png" ,
+            emoji: emoji || "https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/1f4b0.png",
             category,
             amount,
             date,
@@ -60,17 +60,39 @@ const TransactionPage = ({type}) => {
         try {
             const response = await axiosInstance.post(API_PATHS.TRANSACTION.ADD, data);
             if (response.status == 200) {
-                showToast(true, "Transaction added")
+                showToast(true, "Transaction added");
             }
         } catch (error) {
-            showToast(false, error)
+            showToast(false, error);
         } finally {
             setAddModalOpen(false);
         }
     };
 
+    const handleDownload = async () => {
+        try {
+            setLoading(true);
+            const response = await axiosInstance.get(API_PATHS.TRANSACTION.DOWNLOAD + `?month=${selectedMonth}&year=${selectedYear}&type=${type}`, {
+                responseType: "blob",
+            });
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `${type}_details_${selectedMonth}_${selectedYear}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            setLoading(false);
+        } catch (err) {
+            setLoading(false);
+            alert(err);
+        }
+    };
+
     const [transactions, setTransactions] = useState([]);
-    const [chartData, setChartData] = useState([])
+    const [chartData, setChartData] = useState([]);
 
     const fetchTransactions = async () => {
         try {
@@ -79,17 +101,16 @@ const TransactionPage = ({type}) => {
             if (response.status == 200) {
                 const data = response.data.data.filter((item) => item.type === type);
                 setTransactions(response.data.data.filter((item) => item.type === type));
-                const chartDataArray = []
-                data.forEach((transaction)=> {
-                    const existingIndex = chartDataArray.findIndex((item)=> item.category.toLowerCase().trim() === transaction.category.toLowerCase().trim())
-                    if(existingIndex !== -1){
-                        chartDataArray[existingIndex].amount +=transaction.amount
+                const chartDataArray = [];
+                data.forEach((transaction) => {
+                    const existingIndex = chartDataArray.findIndex((item) => item.category.toLowerCase().trim() === transaction.category.toLowerCase().trim());
+                    if (existingIndex !== -1) {
+                        chartDataArray[existingIndex].amount += transaction.amount;
+                    } else {
+                        chartDataArray.push({ ...transaction });
                     }
-                    else{
-                        chartDataArray.push({...transaction})
-                    }
-                })
-                setChartData(chartDataArray)
+                });
+                setChartData(chartDataArray);
                 setLoading(false);
             }
         } catch (err) {
@@ -133,7 +154,7 @@ const TransactionPage = ({type}) => {
             <div className="rounded-md p-3 bg-white shadow-md my-3">
                 <div className="p-3 lg:p-4 flex justify-between">
                     <h2 className="text-xs md:text-sm lg:text-base font-semibold">{capitalizedType} Sources</h2>
-                    <button className="flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-[9px] md:text-xs hover:bg-primary/15 hover:text-primary font-medium">
+                    <button onClick={handleDownload} className="flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-[9px] md:text-xs hover:bg-primary/15 hover:text-primary font-medium">
                         <FiDownload /> Download
                     </button>
                 </div>
@@ -160,15 +181,7 @@ const TransactionPage = ({type}) => {
                         </button>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2">
-                    {transactions.length > 0 ? (
-                        transactions.map((transac) => (
-                            <TransactionItem transaction={transac} />
-                        ))
-                    ) : (
-                        <p>No {capitalizedType}</p>
-                    )}
-                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2">{transactions.length > 0 ? transactions.map((transac) => <TransactionItem transaction={transac} />) : <p>No {capitalizedType}</p>}</div>
             </div>
             {addModalOpen && <AddTransactionPopUp type={capitalizedType} closePopup={() => setAddModalOpen(false)} submit={handleAddTransaction} />}
         </div>

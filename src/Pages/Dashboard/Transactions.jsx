@@ -43,6 +43,28 @@ const Transactions = () => {
         setSelectedYear((prev) => prev + (type === "sub" ? -1 : 1));
     };
 
+    const handleDownload = async () => {
+        try {
+            setLoading(true);
+            const response = await axiosInstance.get(API_PATHS.TRANSACTION.DOWNLOAD + `?month=${selectedMonth}&year=${selectedYear}&type=all`, {
+                responseType: "blob",
+            });
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `all_details_${selectedMonth}_${selectedYear}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            setLoading(false);
+        } catch (err) {
+            setLoading(false);
+            alert(err);
+        }
+    };
+
     const fetchTransactions = async () => {
         try {
             setLoading(true);
@@ -62,18 +84,16 @@ const Transactions = () => {
         fetchTransactions();
     }, [selectedMonth, selectedYear]);
 
-    const [selectedType, setSelectedType]= useState('all')
-    const [filteredTransactions, setFilteredTransactions]= useState(transactions)
+    const [selectedType, setSelectedType] = useState("all");
+    const [filteredTransactions, setFilteredTransactions] = useState(transactions);
 
-    useEffect(()=>{
-        if(selectedType === "all"){
-            setFilteredTransactions(transactions)
+    useEffect(() => {
+        if (selectedType === "all") {
+            setFilteredTransactions(transactions);
+        } else {
+            setFilteredTransactions(transactions.filter((transac) => transac.type === selectedType));
         }
-        else{
-            setFilteredTransactions(transactions.filter((transac)=> transac.type === selectedType))
-        }
-    }, [selectedType, transactions])
-
+    }, [selectedType, transactions]);
 
     if (loading) {
         return <Loader />;
@@ -108,14 +128,14 @@ const Transactions = () => {
             <div className="rounded-md p-3 bg-white shadow-md my-3">
                 <div className="p-3 lg:p-4 flex justify-between">
                     <h2 className="text-xs md:text-sm lg:text-base font-semibold">All Transactions</h2>
-                    <button className="flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-[9px] md:text-xs hover:bg-primary/15 hover:text-primary font-medium">
+                    <button onClick={handleDownload} className="flex items-center gap-2 bg-accent rounded-sm px-2 py-1 text-[9px] md:text-xs hover:bg-primary/15 hover:text-primary font-medium">
                         <FiDownload /> Download
                     </button>
                 </div>
                 <div className="p-4 flex justify-between gap-4">
                     <div className="flex gap-2 items-center">
                         <FaFilter />
-                        <select className="bg-accent p-1" value={selectedType} onChange={(e)=> setSelectedType(e.target.value)}>
+                        <select className="bg-accent p-1" value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
                             <option value={"all"}>All</option>
                             <option value={"income"}>Income</option>
                             <option value={"expense"}>Expense</option>

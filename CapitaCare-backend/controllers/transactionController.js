@@ -1,16 +1,11 @@
-const { json } = require("express");
+const xlsx = require("xlsx")
 const Transaction = require("../models/Transaction");
 
-exports.fetchTransactions = async (req, res) => {
-    const userId = req.user.id;
-    if (!userId) {
-        return res.status(404).json({ message: "User not found" });
-    }
 
-    try {
-        const currentDate = new Date()
-        const month = parseInt(req.query.month) || (currentDate.getMonth() + 1)
-        const year = parseInt(req.query.year) || (currentDate.getFullYear())
+const getTransactionsForThePeriod = async(userId, mon, yr) => {
+    const currentDate = new Date()
+        const month = mon || (currentDate.getMonth() + 1)
+        const year = yr|| (currentDate.getFullYear())
 
         if(month < 1 || month > 12){
             return res.status(400).json({
@@ -25,8 +20,22 @@ exports.fetchTransactions = async (req, res) => {
             $gte: startDate,
             $lte: endDate
         } }).sort({ date: -1 });
+        return transactions
+}
 
-        const total = Transaction.length
+exports.fetchTransactions = async (req, res) => {
+    const userId = req.user.id;
+    if (!userId) {
+        return res.status(404).json({ message: "User not found" });
+    }
+
+    try {
+        const month = parseInt(req.query.month)
+        const year = parseInt(req.query.year) 
+
+        const transactions = await getTransactionsForThePeriod(userId, month, year)
+
+        const total = transactions.length
 
         //for chart data
         const getWeekNumber = (date) => {
@@ -170,3 +179,40 @@ exports.deleteTransaction = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+exports.downloadTransactionExcel = async (req, res) => {
+    const userId = req.user.id;
+    if (!userId) {
+        return res.status(404).json({ message: "User not found" });
+    }
+    try{
+        const month = parseInt(req.query.month)
+        const year = parseInt(req.query.year) 
+        const type = req.query.type || "all"
+
+        const transactions = await getTransactionsForThePeriod(userId, month, year)
+        let jsonTransactions = []
+        if(type === "all"){
+            jsonTransactions = transactions.map((item)=>({
+                type:item.type,
+                category: item.category,
+                amount: item.amount,
+                date: new Date(item.date).toISOString().split("T")[0]
+            }))
+        }
+        else{
+            jsonTransactions = transactions.filter((transaction)=> transaction.type === type).map((item)=>({
+                category: item.category,
+                amount: item.amount,
+                date: new Date(item.date).toISOString().split("T")[0]
+            }))
+        }
+        const workbook = xlsx.utils.book_new()
+        const worksheet = xlsx.utils.json_to_sheet(jsonTransactions)
+        xlsx.utils.book_append_sheet(workbook, worksheet, "Transactions")
+        xlsx.writeFile(workbook, `${type}_details_${month}_${year}.xlsx`)
+        res.download(`${type}_details_${month}_${year}.xlsx`)
+    }
+    catch(err){
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
