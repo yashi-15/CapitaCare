@@ -42,7 +42,7 @@ const Dashboard = () => {
                     </div>
                     <div className="border-t-2 border-accent">
                         <div className="flex items-center gap-4 md:p-2 w-full md:bg-primary/15 rounded-md mt-4">
-                            <div className="bg-primary/15 md:bg-white p-2 rounded-full text-xs md:text-sm lg:text-base">DK </div>
+                            <div className="bg-primary/15 md:bg-white p-2 rounded-full text-xs md:text-sm lg:text-base">{(user.fullName.charAt(0) + user.fullName.split(" ")[1]?.charAt(0)).toUpperCase() } </div>
                             <div className="grow hidden md:block">
                                 <h3 className="text-xs xl:text-lg">{user.fullName}</h3>
                                 <p className="text-xs font-light text-gray-700">{user.email}</p>

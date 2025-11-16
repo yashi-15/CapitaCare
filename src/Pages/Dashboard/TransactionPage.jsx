@@ -70,6 +70,7 @@ const TransactionPage = ({type}) => {
     };
 
     const [transactions, setTransactions] = useState([]);
+    const [chartData, setChartData] = useState([])
 
     const fetchTransactions = async () => {
         try {
@@ -77,7 +78,18 @@ const TransactionPage = ({type}) => {
             const response = await axiosInstance.get(API_PATHS.TRANSACTION.FETCH + `?month=${selectedMonth}&year=${selectedYear}`);
             if (response.status == 200) {
                 const data = response.data.data.filter((item) => item.type === type);
-                setTransactions(data);
+                setTransactions(response.data.data.filter((item) => item.type === type));
+                const chartDataArray = []
+                data.forEach((transaction)=> {
+                    const existingIndex = chartDataArray.findIndex((item)=> item.category.toLowerCase().trim() === transaction.category.toLowerCase().trim())
+                    if(existingIndex !== -1){
+                        chartDataArray[existingIndex].amount +=transaction.amount
+                    }
+                    else{
+                        chartDataArray.push({...transaction})
+                    }
+                })
+                setChartData(chartDataArray)
                 setLoading(false);
             }
         } catch (err) {
@@ -104,7 +116,7 @@ const TransactionPage = ({type}) => {
                     </button>
                 </div>
                 <div className="flex justify-center items-center mt-6">
-                    <AreaChart style={{ width: "960%", height: "100%", maxHeight: "35vh", aspectRatio: 1.618 }} responsive data={transactions} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
+                    <AreaChart style={{ width: "960%", height: "100%", maxHeight: "35vh", aspectRatio: 1.618 }} responsive data={chartData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
                         <defs>
                             <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="5%" stopColor="#A664FF" stopOpacity={0.8} />

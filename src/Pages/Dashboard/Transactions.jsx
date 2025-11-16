@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaFilter } from "react-icons/fa";
 import { FiArrowLeft, FiArrowRight, FiDownload } from "react-icons/fi";
 import { LuPlug, LuPlus } from "react-icons/lu";
 import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
@@ -105,6 +105,19 @@ const Transactions = () => {
         fetchTransactions();
     }, [selectedMonth, selectedYear]);
 
+    const [selectedType, setSelectedType]= useState('all')
+    const [filteredTransactions, setFilteredTransactions]= useState(transactions)
+
+    useEffect(()=>{
+        if(selectedType === "all"){
+            setFilteredTransactions(transactions)
+        }
+        else{
+            setFilteredTransactions(transactions.filter((transac)=> transac.type === selectedType))
+        }
+    }, [selectedType, transactions])
+
+
     if (loading) {
         return <Loader />;
     }
@@ -142,30 +155,40 @@ const Transactions = () => {
                         <FiDownload /> Download
                     </button>
                 </div>
-                <div className="p-4 flex justify-end gap-4">
-                    <div className="flex justify-center gap-2">
-                        <button onClick={() => updateMonth("sub")} className="flex items-center gap-2 bg-accent rounded-sm px-1 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium">
-                            <FiArrowLeft />
-                        </button>
-                        <h2 className="text-[9px] sm:text-xs md:text-sm lg:text-base font-semibold w-12 sm:w-18 lg:w-22 text-center">{monthNames[selectedMonth]}</h2>
-                        <button
-                            onClick={() => updateMonth("add")}
-                            className={`${selectedYear === currentDate.getFullYear() && selectedMonth === currentDate.getMonth() + 1 ? "invisible" : ""} flex items-center gap-2 bg-accent rounded-sm px-1 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium`}
-                        >
-                            <FiArrowRight />
-                        </button>
+                <div className="p-4 flex justify-between gap-4">
+                    <div className="flex gap-2 items-center">
+                        <FaFilter />
+                        <select className="bg-accent p-1" value={selectedType} onChange={(e)=> setSelectedType(e.target.value)}>
+                            <option value={"all"}>All</option>
+                            <option value={"income"}>Income</option>
+                            <option value={"expense"}>Expense</option>
+                        </select>
                     </div>
-                    <div className="flex justify-center gap-2">
-                        <button onClick={() => updateYear("sub")} className="flex items-center gap-2 bg-accent rounded-sm px-1 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium">
-                            <FiArrowLeft />
-                        </button>
-                        <h2 className="text-[9px] sm:text-xs md:text-sm lg:text-base font-semibold sm:w-8 lg:w-10 text-center">{selectedYear}</h2>
-                        <button onClick={() => updateYear("add")} className={`${selectedYear === currentDate.getFullYear() ? "invisible" : ""} flex items-center gap-2 bg-accent rounded-sm px-1 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium`}>
-                            <FiArrowRight />
-                        </button>
+                    <div className="flex gap-4">
+                        <div className="flex justify-center gap-2">
+                            <button onClick={() => updateMonth("sub")} className="flex items-center gap-2 bg-accent rounded-sm px-1 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium">
+                                <FiArrowLeft />
+                            </button>
+                            <h2 className="text-[9px] sm:text-xs md:text-sm lg:text-base font-semibold w-12 sm:w-18 lg:w-22 text-center">{monthNames[selectedMonth]}</h2>
+                            <button
+                                onClick={() => updateMonth("add")}
+                                className={`${selectedYear === currentDate.getFullYear() && selectedMonth === currentDate.getMonth() + 1 ? "invisible" : ""} flex items-center gap-2 bg-accent rounded-sm px-1 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium`}
+                            >
+                                <FiArrowRight />
+                            </button>
+                        </div>
+                        <div className="flex justify-center gap-2">
+                            <button onClick={() => updateYear("sub")} className="flex items-center gap-2 bg-accent rounded-sm px-1 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium">
+                                <FiArrowLeft />
+                            </button>
+                            <h2 className="text-[9px] sm:text-xs md:text-sm lg:text-base font-semibold sm:w-8 lg:w-10 text-center">{selectedYear}</h2>
+                            <button onClick={() => updateYear("add")} className={`${selectedYear === currentDate.getFullYear() ? "invisible" : ""} flex items-center gap-2 bg-accent rounded-sm px-1 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium`}>
+                                <FiArrowRight />
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2">{transactions.length > 0 ? transactions.map((transac) => <TransactionItem transaction={transac} />) : <p>No transactions</p>}</div>
+                <div className="grid grid-cols-1 sm:grid-cols-2">{filteredTransactions.length > 0 ? filteredTransactions.map((transac) => <TransactionItem transaction={transac} />) : <p>No transactions</p>}</div>
             </div>
         </div>
     );
