@@ -101,7 +101,7 @@ const Transactions = () => {
 
     return (
         <div className="py-3">
-            <div className="bg-white p-3 rounded-md shadow-md my-3">
+            <div className="bg-white p-3 rounded-md shadow-md my-3 min-h-80">
                 <div className="p-3 lg:p-4">
                     <h2 className="text-xs md:text-sm lg:text-base font-semibold">All Transactions Overview</h2>
                 </div>
@@ -165,7 +165,9 @@ const Transactions = () => {
                         </div>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2">{filteredTransactions.length > 0 ? filteredTransactions.map((transac) => <TransactionItem transaction={transac} />) : <p>No transactions</p>}</div>
+                <div className="h-80 overflow-auto scrollbar-minimal [&::-webkit-scrollbar-button]:hidden">
+                    {filteredTransactions.length > 0 ? <div className="grid grid-cols-1 sm:grid-cols-2">{filteredTransactions.map((transac) => <TransactionItem transaction={transac} />)}</div> : <p className="text-center">No transactions</p>}
+                </div>
             </div>
         </div>
     );

@@ -61,6 +61,7 @@ const TransactionPage = ({ type }) => {
             const response = await axiosInstance.post(API_PATHS.TRANSACTION.ADD, data);
             if (response.status == 200) {
                 showToast(true, "Transaction added");
+                setTransactions((prev) => [response.data.transaction, ...prev])
             }
         } catch (error) {
             showToast(false, error);
@@ -129,7 +130,7 @@ const TransactionPage = ({ type }) => {
 
     return (
         <div className="py-3">
-            <div className="bg-white p-3 rounded-md shadow-md my-3">
+            <div className="bg-white p-3 rounded-md shadow-md my-3 min-h-80">
                 <div className="p-3 lg:p-4 flex justify-between">
                     <h2 className="text-xs md:text-sm lg:text-base font-semibold">{capitalizedType} Overview</h2>
                     <button onClick={() => setAddModalOpen(true)} className="flex items-center gap-2 rounded-sm px-2 py-1 text-[9px] md:text-xs text-sm bg-primary/15 text-primary hover:scale-96 font-medium">
@@ -181,7 +182,9 @@ const TransactionPage = ({ type }) => {
                         </button>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2">{transactions.length > 0 ? transactions.map((transac) => <TransactionItem transaction={transac} />) : <p>No {capitalizedType}</p>}</div>
+                <div className="h-80 overflow-auto scrollbar-minimal">
+                    {transactions.length > 0 ? <div className="grid grid-cols-1 sm:grid-cols-2">{transactions.map((transac) => <TransactionItem transaction={transac} />)}</div> : <p className="text-center">No {capitalizedType}</p>}
+                </div>
             </div>
             {addModalOpen && <AddTransactionPopUp type={capitalizedType} closePopup={() => setAddModalOpen(false)} submit={handleAddTransaction} />}
         </div>

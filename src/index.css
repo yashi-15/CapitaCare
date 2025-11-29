@@ -18,3 +18,10 @@
   --color-success: #10B981;
   --color-border:  #E6EEF8;
 }
+
+@layer utilities {
+  .scrollbar-minimal {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(203 213 225) transparent;
+  }
+}
