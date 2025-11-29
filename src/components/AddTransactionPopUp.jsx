@@ -78,7 +78,7 @@ const AddTransactionPopUp = ({ type, closePopup, submit }) => {
                                 if (file) handleReceiptScan(file);
                             }}
                         />
-                        <button type="button" className="bg-primary text-white p-2 font-semibold rounded-md w-full" onClick={() => FileInputRef.current?.click()}>
+                        <button type="button" className="bg-primary text-white p-2 font-semibold rounded-md w-full" disabled={scanningState} onClick={() => FileInputRef.current?.click()}>
                             {scanningState ? (
                                 <span>Scanning...</span>
                             ) : scannedFileName ? (

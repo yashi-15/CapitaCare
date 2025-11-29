@@ -97,7 +97,7 @@ const TransactionPage = ({ type }) => {
     const fetchTransactions = async () => {
         try {
             setLoading(true);
-            const response = await axiosInstance.get(API_PATHS.TRANSACTION.FETCH + `?month=${selectedMonth}&year=${selectedYear}`);
+            const response = await axiosInstance.get(API_PATHS.TRANSACTION.FETCH + `?month=${selectedMonth}&year=${selectedYear}&type=${type}`);
             if (response.status == 200) {
                 const data = response.data.data.filter((item) => item.type === type);
                 setTransactions(response.data.data.filter((item) => item.type === type));

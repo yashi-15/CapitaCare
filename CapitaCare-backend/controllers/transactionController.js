@@ -2,7 +2,7 @@ const xlsx = require("xlsx");
 const Transaction = require("../models/Transaction");
 const {GoogleGenerativeAI} = require("@google/generative-ai");
 
-const getTransactionsForThePeriod = async (userId, mon, yr) => {
+const getTransactionsForThePeriod = async (userId, mon, yr, type) => {
     const currentDate = new Date();
     const month = mon || currentDate.getMonth() + 1;
     const year = yr || currentDate.getFullYear();
@@ -16,13 +16,20 @@ const getTransactionsForThePeriod = async (userId, mon, yr) => {
     const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 1);
 
-    const transactions = await Transaction.find({
+    const query = {
         user: userId,
         date: {
             $gte: startDate,
             $lte: endDate,
         },
-    }).sort({ date: -1 });
+    }
+
+    if(type && (type === 'income' || type=== 'expense') ){
+        query.type = type
+    }
+
+    const transactions = await Transaction.find(query).sort({ date: -1 });
+
     return transactions;
 };
 
@@ -35,8 +42,9 @@ exports.fetchTransactions = async (req, res) => {
     try {
         const month = parseInt(req.query.month);
         const year = parseInt(req.query.year);
+        const type = req.query.type;
 
-        const transactions = await getTransactionsForThePeriod(userId, month, year);
+        const transactions = await getTransactionsForThePeriod(userId, month, year, type);
 
         const total = transactions.length;
 
