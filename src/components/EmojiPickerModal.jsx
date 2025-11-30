@@ -10,7 +10,7 @@ const EmojiPickerModal = ({ icon, onSelect }) => {
             <div className="flex gap-3 items-center">
                 <div className="flex items-center gap-3 cursor-pointer" onClick={() => setIsOpen(true)}>
                     <button className="p-3 bg-accent rounded-md cursor-pointer">{icon ? <img width={"32px"} src={icon} /> : <FiImage size={"32px"} />}</button>
-                    <div>Choose icon</div>
+                    <div className="text-sm sm:text-base">Choose icon</div>
                 </div>
                 {isOpen && (
                     <div className="relative">

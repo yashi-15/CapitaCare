@@ -56,7 +56,7 @@ const AddTransactionPopUp = ({ type, closePopup, submit }) => {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="w-xl bg-white">
+            <div className="w-[80%] sm:w-lg md:w-xl bg-white">
                 <div className="flex justify-between gap-2 p-4 border-b border-accent">
                     <h1 className="font-semibold">Add {type} </h1>
                     <button onClick={closePopup} className="text-secondary">
@@ -78,7 +78,7 @@ const AddTransactionPopUp = ({ type, closePopup, submit }) => {
                                 if (file) handleReceiptScan(file);
                             }}
                         />
-                        <button type="button" className="bg-primary text-white p-2 font-semibold rounded-md w-full" disabled={scanningState} onClick={() => FileInputRef.current?.click()}>
+                        <button type="button" className="bg-primary text-sm sm:text-base text-white p-2 font-semibold rounded-md w-full" disabled={scanningState} onClick={() => FileInputRef.current?.click()}>
                             {scanningState ? (
                                 <span>Scanning...</span>
                             ) : scannedFileName ? (
@@ -96,14 +96,14 @@ const AddTransactionPopUp = ({ type, closePopup, submit }) => {
 
                     <EmojiPickerModal icon={emoji} onSelect={(emoji) => setEmoji(emoji)} />
                     <div className="flex flex-col gap-3">
-                        <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Category" name="category" className=" bg-secondary/12 rounded-md p-2 focus:outline-secondary focus:outline-1" />
-                        <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Amount" name="amount" className="bg-secondary/12 rounded-md p-2 focus:outline-secondary focus:outline-1" />
-                        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} placeholder="Date" name="date" className="bg-secondary/12 rounded-md p-2 focus:outline-secondary focus:outline-1" />
-                        <textarea type="text" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Note.." name="note" className="bg-secondary/12 rounded-md p-2 focus:outline-secondary focus:outline-1" />
+                        <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Category" name="category" className=" bg-secondary/12 text-xs sm:text-base rounded-md p-2 focus:outline-secondary focus:outline-1" />
+                        <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Amount" name="amount" className="bg-secondary/12 text-xs sm:text-base rounded-md p-2 focus:outline-secondary focus:outline-1" />
+                        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} placeholder="Date" name="date" className="bg-secondary/12 text-xs sm:text-base rounded-md p-2 focus:outline-secondary focus:outline-1" />
+                        <textarea type="text" value={note} onChange={(e) => setNote(e.target.value)} placeholder="Note.." name="note" className="bg-secondary/12 text-xs sm:text-base rounded-md p-2 focus:outline-secondary focus:outline-1" />
                     </div>
 
                     <div className="self-end">
-                        <button onClick={() => submit(emoji, category, amount, date, note)} className="bg-secondary text-white p-2 font-semibold rounded-md">
+                        <button onClick={() => submit(emoji, category, amount, date, note)} className="bg-secondary text-sm sm:text-base text-white p-2 font-semibold rounded-md">
                             Add {type}
                         </button>
                     </div>

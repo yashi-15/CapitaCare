@@ -16,6 +16,14 @@ const Dashboard = () => {
     const [moreOptions, setMoreOptions] = useState(false);
     const [logoutPopup, setLogoutPopup] = useState(false);
 
+    const {clearUser} = useContext(UserContext)
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        clearUser()
+        window.location.href = "/login";
+    }
+
     return (
         user && (
             <div className="flex h-screen">
@@ -72,11 +80,11 @@ const Dashboard = () => {
                 </main>
                 {logoutPopup && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                        <div className="w-xl bg-white p-4">
-                            <h1 className="text-lg font-semibold">Are you sure?</h1>
+                        <div className="w-[85%] sm:w-xl md:w-xl bg-white p-4">
+                            <h1 className="text-base font-semibold">Are you sure?</h1>
                             <div className="flex justify-end items-center gap-4">
-                                <button className="bg-primary text-white p-2 font-semibold rounded-md">Cancel</button>
-                                <button className="bg-secondary text-white p-2 font-semibold rounded-md">Logout</button>
+                                <button onClick={()=> setLogoutPopup(false)} className="bg-primary text-sm sm:text-base text-white p-2 font-semibold rounded-md cursor-pointer">Cancel</button>
+                                <button onClick={handleLogout} className="bg-secondary text-sm sm:text-base text-white p-2 font-semibold rounded-md cursor-pointer">Logout</button>
                             </div>
                         </div>
                     </div>

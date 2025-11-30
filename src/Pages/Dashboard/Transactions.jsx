@@ -132,16 +132,16 @@ const Transactions = () => {
                         <FiDownload /> Download
                     </button>
                 </div>
-                <div className="p-4 flex justify-between gap-4">
+                <div className="p-4 flex flex-col md:flex-row justify-between gap-4">
                     <div className="flex gap-2 items-center">
                         <FaFilter />
-                        <select className="bg-accent p-1" value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
+                        <select className="bg-accent p-1 text-[9px] sm:text-xs md:text-sm lg:text-base" value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
                             <option value={"all"}>All</option>
                             <option value={"income"}>Income</option>
                             <option value={"expense"}>Expense</option>
                         </select>
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex justify-end gap-4">
                         <div className="flex justify-center gap-2">
                             <button onClick={() => updateMonth("sub")} className="flex items-center gap-2 bg-accent rounded-sm px-1 py-1 text-xs hover:bg-primary/15 hover:text-primary font-medium">
                                 <FiArrowLeft />
