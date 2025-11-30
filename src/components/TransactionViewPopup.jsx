@@ -7,7 +7,7 @@ import { API_PATHS } from "../utils/apiPaths";
 import EmojiPickerModal from "./EmojiPickerModal";
 import showToast from "../utils/showToast";
 
-const TransactionViewPopup = ({ transaction, closePopup }) => {
+const TransactionViewPopup = ({ transaction, closePopup, onUpdation, onDeletion }) => {
     const [deletePopup, setDeletePopup] = useState(false);
     const [editMode, setEditMode] = useState(false);
 
@@ -16,6 +16,7 @@ const TransactionViewPopup = ({ transaction, closePopup }) => {
             const response = await axiosInstance.delete(API_PATHS.TRANSACTION.DELETE(transaction._id));
             if (response.status === 200) {
                 setDeletePopup(false);
+                onDeletion(transaction._id)
                 closePopup();
                 showToast( true, "Transaction deleted");
             }
@@ -43,6 +44,7 @@ const TransactionViewPopup = ({ transaction, closePopup }) => {
             const response = await axiosInstance.put(API_PATHS.TRANSACTION.UPDATE(transaction._id), data);
             if (response.status === 200) {
                 showToast(true, "Transaction updated");
+                onUpdation(response.data.transaction)
                 closePopup();
             }
         } catch (error) {

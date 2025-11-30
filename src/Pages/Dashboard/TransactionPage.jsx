@@ -120,6 +120,12 @@ const TransactionPage = ({ type }) => {
         }
     };
 
+    const onDeletion = (id) => {
+        // const newData = transactions.filter((transaction)=> transaction._id !== id )
+        // console.log(newData)
+        setTransactions(prev => prev.filter(t => t._id !== id))
+    }
+
     useEffect(() => {
         fetchTransactions();
     }, [selectedMonth, selectedYear]);
@@ -183,7 +189,7 @@ const TransactionPage = ({ type }) => {
                     </div>
                 </div>
                 <div className="h-80 overflow-auto scrollbar-minimal">
-                    {transactions.length > 0 ? <div className="grid grid-cols-1 sm:grid-cols-2">{transactions.map((transac) => <TransactionItem transaction={transac} />)}</div> : <p className="text-center">No {capitalizedType}</p>}
+                    {transactions.length > 0 ? <div className="grid grid-cols-1 sm:grid-cols-2">{transactions.map((transac) => <TransactionItem key={transac._id} transaction={transac} onDeletion={onDeletion} />)}</div> : <p className="text-center">No {capitalizedType}</p>}
                 </div>
             </div>
             {addModalOpen && <AddTransactionPopUp type={capitalizedType} closePopup={() => setAddModalOpen(false)} submit={handleAddTransaction} />}
