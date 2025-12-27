@@ -77,7 +77,7 @@ const DashHome = () => {
                             {dashData.recentTransactions?.map((transac) => {
                                 return (
                                     <li key={transac.id} className="hover:bg-accent">
-                                        <TransactionItem transaction={transac} />
+                                        <TransactionItem key={transac.id} transaction={transac} />
                                     </li>
                                 );
                             })}

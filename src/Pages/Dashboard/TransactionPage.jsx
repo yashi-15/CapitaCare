@@ -112,6 +112,8 @@ const TransactionPage = ({ type }) => {
                     }
                 });
                 setChartData(chartDataArray);
+                console.log(chartDataArray.length);
+                
                 setLoading(false);
             }
         } catch (err) {
@@ -144,7 +146,7 @@ const TransactionPage = ({ type }) => {
                     </button>
                 </div>
                 <div className="flex justify-center items-center mt-6">
-                    <AreaChart style={{ width: "960%", height: "100%", maxHeight: "35vh", aspectRatio: 1.618 }} responsive data={chartData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
+                    {chartData.length === 0? <p>No data</p> : <AreaChart style={{ width: "960%", height: "100%", maxHeight: "35vh", aspectRatio: 1.618 }} responsive data={chartData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
                         <defs>
                             <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="5%" stopColor="#A664FF" stopOpacity={0.8} />
@@ -155,7 +157,7 @@ const TransactionPage = ({ type }) => {
                         <YAxis width="auto" tickLine={false} axisLine={false} style={{ fontSize: "12px" }} />
                         <Tooltip />
                         <Area type="monotone" dataKey="amount" stroke="#A664FF" strokeWidth={3} fill="url(#colorPv)" activeDot={{ r: 8 }} dot={{ fill: "#A664FF" }} />
-                    </AreaChart>
+                    </AreaChart>}
                 </div>
             </div>
             <div className="rounded-md p-3 bg-white shadow-md my-3">
@@ -189,7 +191,7 @@ const TransactionPage = ({ type }) => {
                     </div>
                 </div>
                 <div className="h-80 overflow-auto scrollbar-minimal">
-                    {transactions.length > 0 ? <div className="grid grid-cols-1 sm:grid-cols-2">{transactions.map((transac) => <TransactionItem key={transac._id} transaction={transac} onDeletion={onDeletion} />)}</div> : <p className="text-center">No {capitalizedType}</p>}
+                    {transactions.length > 0 ? <div className="grid grid-cols-1 sm:grid-cols-2">{transactions.map((transac) => <TransactionItem key={transac._id} transaction={transac} onDeletion={onDeletion} />)}</div> : <p className="text-center">No {capitalizedType} in {monthNames[selectedMonth]} </p>}
                 </div>
             </div>
             {addModalOpen && <AddTransactionPopUp type={capitalizedType} closePopup={() => setAddModalOpen(false)} submit={handleAddTransaction} />}
